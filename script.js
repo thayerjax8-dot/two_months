@@ -1,10 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const messages = [
-        "I love you more every day 🥺",
-        "Two months already, forever to go 💖",
-        "You make my life better ✨",
-        "I'm so lucky to have you 💕",
-        "This is just the beginning 😊"
+    // 1. YOUR EXACT FILE NAMES
+    const photoFiles = [
+        "1.jpg.JPG", "2.jpg.JPG", "3.jpg.JPG", "4.jpg.JPG", "5.jpg.JPG",
+        "6.jpg.JPG", "7.jpg.JPG", "8.jpg.HEIC", "9.jpg.HEIC", "10.jpg.HEIC",
+        "11.jpg.JPG", "12.jpg.HEIC", "13.jpg.JPG", "14.jpg.HEIC", "15.jpg.JPG",
+        "16.jpg.HEIC", "17.jpg.JPG", "18.jpg.JPG", "19.jpg.JPG", "20.jpg.JPG"
     ];
 
     const playlist = [
@@ -14,59 +14,60 @@ document.addEventListener("DOMContentLoaded", () => {
         "Zach Bryan - Madeline (feat. Gabriella Rose).mp3",
         "Flatland Cavalry - Sleeping Alone (Official Audio).mp3"
     ];
-    
-    let currentSongIndex = 0;
 
-    const heartBtn = document.getElementById("heart-btn");
-    const nextBtn = document.getElementById("next-song-btn");
-    const messageText = document.getElementById("message");
-    const music = document.getElementById("bg-music");
-    const musicSource = document.getElementById("music-source");
-    const timerDisplay = document.getElementById("timer");
-    const volumeSlider = document.getElementById("volume-slider");
+    const scatterField = document.getElementById("photo-scatter-field");
+    const modal = document.getElementById("photo-modal");
+    const modalImg = document.getElementById("modal-img");
 
-    // Set default volume
-    music.volume = 0.5;
-
-    // Timer Logic (Nov 29, 2025 at 8:39 PM)
-    const startDate = new Date("November 29, 2025 20:39:00").getTime();
-
-    function updateTimer() {
-        const now = new Date().getTime();
-        const diff = now - startDate;
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-        timerDisplay.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-    }
-
-    setInterval(updateTimer, 1000);
-    updateTimer();
-
-    // Heart Click: Fixes Audio & Changes Message
-    heartBtn.addEventListener("click", () => {
-        const randomIndex = Math.floor(Math.random() * messages.length);
-        messageText.textContent = messages[randomIndex];
+    // 2. Scatter Photos
+    photoFiles.forEach((file, index) => {
+        const pol = document.createElement("div");
+        pol.className = "polaroid";
         
-        // Browsers require a click to play audio
-        music.play().then(() => {
-            console.log("Playing: " + playlist[currentSongIndex]);
-        }).catch(error => {
-            console.log("Playback failed. Please try clicking again.");
-        });
+        const x = Math.random() * (window.innerWidth - 150);
+        const y = Math.random() * 1500 + 200; // Spreads them deep down
+        const rot = Math.random() * 40 - 20;
+
+        pol.style.left = `${x}px`;
+        pol.style.top = `${y}px`;
+        pol.style.transform = `rotate(${rot}deg)`;
+
+        pol.innerHTML = `<img src="${file}"><p>Memory #${index + 1}</p>`;
+
+        pol.onclick = () => {
+            modalImg.src = file;
+            document.getElementById("modal-caption").textContent = `Memory #${index + 1} ❤️`;
+            modal.style.display = "flex";
+        };
+        scatterField.appendChild(pol);
     });
 
-    // Next Song Button
-    nextBtn.addEventListener("click", () => {
-        currentSongIndex = (currentSongIndex + 1) % playlist.length;
-        musicSource.src = playlist[currentSongIndex];
-        music.load(); 
-        music.play();
-    });
+    // 3. Timer (Nov 29, 2025)
+    const startDate = new Date("November 29, 2025 20:39:00").getTime();
+    setInterval(() => {
+        const diff = new Date().getTime() - startDate;
+        const d = Math.floor(diff / 86400000);
+        const h = Math.floor((diff % 86400000) / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+        document.getElementById("timer").textContent = `${d}d ${h}h ${m}m ${s}s`;
+    }, 1000);
 
-    // Volume Slider Logic
-    volumeSlider.addEventListener("input", (e) => {
-        music.volume = e.target.value;
-    });
+    // 4. Audio Controls
+    const music = document.getElementById("bg-music");
+    let currentSong = 0;
+
+    document.getElementById("heart-btn").onclick = () => {
+        if(music.paused) music.play();
+        document.getElementById("message").textContent = "I Love You! 💕";
+    };
+
+    document.getElementById("next-song-btn").onclick = () => {
+        currentSong = (currentSong + 1) % playlist.length;
+        document.getElementById("music-source").src = playlist[currentSong];
+        music.load(); music.play();
+    };
+
+    document.getElementById("volume-slider").oninput = (e) => { music.volume = e.target.value; };
+    document.querySelector(".close-btn").onclick = () => modal.style.display = "none";
 });
