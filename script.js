@@ -6,33 +6,59 @@ document.addEventListener("DOMContentLoaded", () => {
         "16.jpg.HEIC", "17.jpg.JPG", "18.jpg.JPG", "19.jpg.JPG", "20.jpg.JPG"
     ];
 
-    const grid = document.getElementById("photo-grid");
-    const modal = document.getElementById("photo-modal");
-    const modalImg = document.getElementById("modal-img");
+    const playlist = [
+        "Eagles - Lyin' Eyes (Official Audio).mp3",
+        "Missed Call.mp3",
+        "Katy Perry - Last Friday Night (Lyrics).mp3",
+        "Zach Bryan - Madeline (feat. Gabriella Rose).mp3",
+        "Flatland Cavalry - Sleeping Alone (Official Audio).mp3"
+    ];
 
-    // Create Grid Items
+    let currentSongIndex = 0;
+    const music = document.getElementById("bg-music");
+    const musicSource = document.getElementById("music-source");
+    const songDisplay = document.getElementById("song-title");
+
+    // 1. Photo Grid Logic
+    const grid = document.getElementById("photo-grid");
     photoFiles.forEach((file, index) => {
         const pol = document.createElement("div");
         pol.className = "polaroid";
-        pol.innerHTML = `
-            <img src="${file}" loading="lazy" alt="Memory">
-            <p>Memory #${index + 1}</p>
-        `;
-
+        pol.innerHTML = `<img src="${file}" loading="lazy"><p>Memory #${index + 1}</p>`;
         pol.onclick = () => {
-            modalImg.src = file;
+            document.getElementById("modal-img").src = file;
             document.getElementById("modal-caption").textContent = `Memory #${index + 1} ❤️`;
-            modal.style.display = "flex";
+            document.getElementById("photo-modal").style.display = "flex";
         };
         grid.appendChild(pol);
     });
 
-    // Gallery Scroll
-    document.getElementById("view-gallery-btn").onclick = () => {
-        document.getElementById("gallery-start").scrollIntoView();
+    // 2. THE NEXT SONG FIX
+    const nextBtn = document.getElementById("next-song-btn");
+    nextBtn.onclick = () => {
+        currentSongIndex = (currentSongIndex + 1) % playlist.length;
+        
+        // Update the source
+        music.pause();
+        musicSource.src = playlist[currentSongIndex];
+        
+        // Crucial: Reload the audio element with the new source
+        music.load(); 
+        
+        // Update the display text (cleaning up the .mp3 part)
+        songDisplay.textContent = playlist[currentSongIndex].replace(".mp3", "");
+        
+        // Play
+        music.play().catch(e => console.log("Playback error:", e));
     };
 
-    // Timer (Nov 29, 2025)
+    // 3. General Controls
+    document.getElementById("heart-btn").onclick = () => { if(music.paused) music.play(); };
+    document.getElementById("volume-slider").oninput = (e) => { music.volume = e.target.value; };
+    document.querySelector(".close-btn").onclick = () => { document.getElementById("photo-modal").style.display = "none"; };
+    document.getElementById("view-gallery-btn").onclick = () => { document.getElementById("gallery-start").scrollIntoView(); };
+
+    // 4. Timer
     const startDate = new Date("November 29, 2025 20:39:00").getTime();
     setInterval(() => {
         const diff = new Date().getTime() - startDate;
@@ -42,10 +68,4 @@ document.addEventListener("DOMContentLoaded", () => {
         const s = Math.floor((diff % 60000) / 1000);
         document.getElementById("timer").textContent = `${d}d ${h}h ${m}m ${s}s`;
     }, 1000);
-
-    // Audio
-    const music = document.getElementById("bg-music");
-    document.getElementById("heart-btn").onclick = () => { if(music.paused) music.play(); };
-    document.getElementById("volume-slider").oninput = (e) => { music.volume = e.target.value; };
-    document.querySelector(".close-btn").onclick = () => modal.style.display = "none";
 });
