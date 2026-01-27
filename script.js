@@ -6,47 +6,33 @@ document.addEventListener("DOMContentLoaded", () => {
         "16.jpg.HEIC", "17.jpg.JPG", "18.jpg.JPG", "19.jpg.JPG", "20.jpg.JPG"
     ];
 
-    const playlist = [
-        "Eagles - Lyin' Eyes (Official Audio).mp3",
-        "Missed Call.mp3",
-        "Katy Perry - Last Friday Night (Lyrics).mp3",
-        "Zach Bryan - Madeline (feat. Gabriella Rose).mp3",
-        "Flatland Cavalry - Sleeping Alone (Official Audio).mp3"
-    ];
-
-    const scatterField = document.getElementById("photo-scatter-field");
+    const grid = document.getElementById("photo-grid");
     const modal = document.getElementById("photo-modal");
     const modalImg = document.getElementById("modal-img");
 
-    // 1. Scatter Photos
+    // Create Grid Items
     photoFiles.forEach((file, index) => {
         const pol = document.createElement("div");
         pol.className = "polaroid";
-        
-        const x = Math.random() * (window.innerWidth - 150);
-        const y = Math.random() * 1800 + 400; // Photos start lower down now
-        const rot = Math.random() * 40 - 20;
-
-        pol.style.left = `${x}px`;
-        pol.style.top = `${y}px`;
-        pol.style.transform = `rotate(${rot}deg)`;
-
-        pol.innerHTML = `<img src="${file}"><p>Memory #${index + 1}</p>`;
+        pol.innerHTML = `
+            <img src="${file}" loading="lazy" alt="Memory">
+            <p>Memory #${index + 1}</p>
+        `;
 
         pol.onclick = () => {
             modalImg.src = file;
             document.getElementById("modal-caption").textContent = `Memory #${index + 1} ❤️`;
             modal.style.display = "flex";
         };
-        scatterField.appendChild(pol);
+        grid.appendChild(pol);
     });
 
-    // 2. Gallery Button Scroll
+    // Gallery Scroll
     document.getElementById("view-gallery-btn").onclick = () => {
         document.getElementById("gallery-start").scrollIntoView();
     };
 
-    // 3. Timer (Nov 29, 2025)
+    // Timer (Nov 29, 2025)
     const startDate = new Date("November 29, 2025 20:39:00").getTime();
     setInterval(() => {
         const diff = new Date().getTime() - startDate;
@@ -57,20 +43,9 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("timer").textContent = `${d}d ${h}h ${m}m ${s}s`;
     }, 1000);
 
-    // 4. Audio Controls
+    // Audio
     const music = document.getElementById("bg-music");
-    let currentSong = 0;
-
-    document.getElementById("heart-btn").onclick = () => {
-        if(music.paused) music.play();
-    };
-
-    document.getElementById("next-song-btn").onclick = () => {
-        currentSong = (currentSong + 1) % playlist.length;
-        document.getElementById("music-source").src = playlist[currentSong];
-        music.load(); music.play();
-    };
-
+    document.getElementById("heart-btn").onclick = () => { if(music.paused) music.play(); };
     document.getElementById("volume-slider").oninput = (e) => { music.volume = e.target.value; };
     document.querySelector(".close-btn").onclick = () => modal.style.display = "none";
 });
