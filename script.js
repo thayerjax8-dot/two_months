@@ -1,43 +1,57 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const messages = [
-    "I can't wait to see you running around with your long stick,
-    " I'm Ken Tran, your husband.",
-    "You make me so h.....",
-    "Can you sit on my..",
-  ];
+    // 1. Data
+    const messages = [
+        "I love you more every day 🥺",
+        "Two months already, forever to go 💖",
+        "You make my life better ✨",
+        "I'm so lucky to have you 💕",
+        "This is just the beginning 😊"
+    ];
 
-  const button = document.getElementById("heart-btn");
-  const messageText = document.getElementById("message");
+    const playlist = ["song1.mp3", "song2.mp3", "song3.mp3", "song4.mp3", "song5.mp3"];
+    let currentSongIndex = 0;
 
-  button.addEventListener("click", () => {
-    const randomIndex = Math.floor(Math.random() * messages.length);
-    messageText.textContent = messages[randomIndex];
-  });
-});
+    // 2. Elements
+    const heartBtn = document.getElementById("heart-btn");
+    const nextBtn = document.getElementById("next-song-btn");
+    const messageText = document.getElementById("message");
+    const music = document.getElementById("bg-music");
+    const musicSource = document.getElementById("music-source");
+    const timerDisplay = document.getElementById("timer");
 
-const music = document.getElementById("bg-music");
-const source = document.getElementById("music-source");
-const nextBtn = document.getElementById("next-song-btn");
+    // 3. Timer Logic (Starting Nov 29, 2025 at 8:39 PM)
+    const startDate = new Date("November 29, 2025 20:39:00").getTime();
 
-// 1. List your 5 songs here
-const playlist = [
-    "song1.mp3",
-    "song2.mp3",
-    "song3.mp3",
-    "song4.mp3",
-    "song5.mp3"
-];
+    function updateTimer() {
+        const now = new Date().getTime();
+        const difference = now - startDate;
 
-let currentSongIndex = 0;
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
-nextBtn.addEventListener("click", () => {
-    // Move to the next song index
-    currentSongIndex = (currentSongIndex + 1) % playlist.length;
-    
-    // Change the source and reload the player
-    source.src = playlist[currentSongIndex];
-    music.load(); 
-    music.play();
-    
-    console.log("Now playing: " + playlist[currentSongIndex]);
+        timerDisplay.textContent = `${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
+    }
+
+    setInterval(updateTimer, 1000); // Update every second
+    updateTimer(); // Run once immediately
+
+    // 4. Heart Button Logic
+    heartBtn.addEventListener("click", () => {
+        const randomIndex = Math.floor(Math.random() * messages.length); 
+        messageText.textContent = messages[randomIndex];
+        
+        if (music.paused) {
+            music.play();
+        }
+    });
+
+    // 5. Playlist Logic
+    nextBtn.addEventListener("click", () => {
+        currentSongIndex = (currentSongIndex + 1) % playlist.length;
+        musicSource.src = playlist[currentSongIndex];
+        music.load();
+        music.play();
+    });
 });
