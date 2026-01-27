@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
     // 1. Data
     const messages = [
-        "I love you more every day 🥺",
-        "Two months already, forever to go 💖",
-        "You make my life better ✨",
-        "I'm so lucky to have you 💕",
-        "This is just the beginning 😊"
+        "I can't wait to see you running around with your long stick",
+        "You make me so h...",
+        "I'm Ken Tran, your husband.",
+        "Is this one for sale?",
+        "Attention shoppers, the store is closing at 8pm"
     ];
 
     const playlist = ["song1.mp3", "song2.mp3", "song3.mp3", "song4.mp3", "song5.mp3"];
