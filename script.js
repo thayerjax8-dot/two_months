@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. Data: Quotes and Music Playlist
     const messages = [
         "I love you more every day 🥺",
         "Two months already, forever to go 💖",
@@ -8,7 +7,6 @@ document.addEventListener("DOMContentLoaded", () => {
         "This is just the beginning 😊"
     ];
 
-    // EXACT filenames from your GitHub uploads
     const playlist = [
         "Eagles - Lyin' Eyes (Official Audio).mp3",
         "Missed Call.mp3",
@@ -19,50 +17,56 @@ document.addEventListener("DOMContentLoaded", () => {
     
     let currentSongIndex = 0;
 
-    // 2. Element Selectors
     const heartBtn = document.getElementById("heart-btn");
     const nextBtn = document.getElementById("next-song-btn");
     const messageText = document.getElementById("message");
     const music = document.getElementById("bg-music");
     const musicSource = document.getElementById("music-source");
     const timerDisplay = document.getElementById("timer");
+    const volumeSlider = document.getElementById("volume-slider");
 
-    // 3. Timer Logic (Starts Nov 29, 2025 at 8:39 PM)
+    // Set default volume
+    music.volume = 0.5;
+
+    // Timer Logic (Nov 29, 2025 at 8:39 PM)
     const startDate = new Date("November 29, 2025 20:39:00").getTime();
 
     function updateTimer() {
         const now = new Date().getTime();
         const diff = now - startDate;
-
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
         timerDisplay.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
     }
 
-    // Refresh the timer every second
     setInterval(updateTimer, 1000);
     updateTimer();
 
-    // 4. Interaction Logic
+    // Heart Click: Fixes Audio & Changes Message
     heartBtn.addEventListener("click", () => {
-        // Change the quote randomly
         const randomIndex = Math.floor(Math.random() * messages.length);
         messageText.textContent = messages[randomIndex];
         
-        // Music plays on the first interaction
-        if (music.paused) {
-            music.play().catch(e => console.log("Music play blocked until user clicks."));
-        }
+        // Browsers require a click to play audio
+        music.play().then(() => {
+            console.log("Playing: " + playlist[currentSongIndex]);
+        }).catch(error => {
+            console.log("Playback failed. Please try clicking again.");
+        });
     });
 
-    // Skip to the next song
+    // Next Song Button
     nextBtn.addEventListener("click", () => {
         currentSongIndex = (currentSongIndex + 1) % playlist.length;
         musicSource.src = playlist[currentSongIndex];
-        music.load(); // Reloads the player with the new file
+        music.load(); 
         music.play();
+    });
+
+    // Volume Slider Logic
+    volumeSlider.addEventListener("input", (e) => {
+        music.volume = e.target.value;
     });
 });
