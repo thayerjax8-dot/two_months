@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // 1. Photo File Names (Exactly as you uploaded)
     const photoFiles = [
         "1.jpg.JPG", "2.jpg.JPG", "3.jpg.JPG", "4.jpg.JPG", "5.jpg.JPG",
         "6.jpg.JPG", "7.jpg.JPG", "8.jpg.HEIC", "9.jpg.HEIC", "10.jpg.HEIC",
@@ -6,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "16.jpg.HEIC", "17.jpg.JPG", "18.jpg.JPG", "19.jpg.JPG", "20.jpg.JPG"
     ];
 
+    // 2. Playlist Names
     const playlist = [
         "Eagles - Lyin' Eyes (Official Audio).mp3",
         "Missed Call.mp3",
@@ -14,12 +16,11 @@ document.addEventListener("DOMContentLoaded", () => {
         "Flatland Cavalry - Sleeping Alone (Official Audio).mp3"
     ];
 
-    let currentSongIndex = 0;
-    const music = document.getElementById("bg-music");
-    const musicSource = document.getElementById("music-source");
-    const songDisplay = document.getElementById("song-title");
+    let currentTrack = 0;
+    const audio = document.getElementById("bg-music");
+    const trackLabel = document.getElementById("current-track");
 
-    // 1. Photo Grid Logic
+    // 3. Grid Generation
     const grid = document.getElementById("photo-grid");
     photoFiles.forEach((file, index) => {
         const pol = document.createElement("div");
@@ -33,35 +34,39 @@ document.addEventListener("DOMContentLoaded", () => {
         grid.appendChild(pol);
     });
 
-    // 2. THE NEXT SONG FIX
+    // 4. THE NEXT SONG BUTTON FIX
     const nextBtn = document.getElementById("next-song-btn");
-    nextBtn.onclick = () => {
-        currentSongIndex = (currentSongIndex + 1) % playlist.length;
-        
-        // Update the source
-        music.pause();
-        musicSource.src = playlist[currentSongIndex];
-        
-        // Crucial: Reload the audio element with the new source
-        music.load(); 
-        
-        // Update the display text (cleaning up the .mp3 part)
-        songDisplay.textContent = playlist[currentSongIndex].replace(".mp3", "");
-        
-        // Play
-        music.play().catch(e => console.log("Playback error:", e));
-    };
+    nextBtn.addEventListener("click", () => {
+        // Move to the next index
+        currentTrack = (currentTrack + 1) % playlist.length;
 
-    // 3. General Controls
-    document.getElementById("heart-btn").onclick = () => { if(music.paused) music.play(); };
-    document.getElementById("volume-slider").oninput = (e) => { music.volume = e.target.value; };
-    document.querySelector(".close-btn").onclick = () => { document.getElementById("photo-modal").style.display = "none"; };
-    document.getElementById("view-gallery-btn").onclick = () => { document.getElementById("gallery-start").scrollIntoView(); };
+        // Force reload the source
+        audio.src = playlist[currentTrack];
+        audio.load(); // Tells the browser to dump old data and fetch new file
+        
+        // Update the display text
+        trackLabel.textContent = playlist[currentTrack].split('.')[0];
 
-    // 4. Timer
+        // Start playing
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.log("Autoplay was prevented. Click the heart!");
+            });
+        }
+    });
+
+    // 5. General Interaction Logic
+    document.getElementById("heart-btn").onclick = () => audio.play();
+    document.getElementById("volume-slider").oninput = (e) => audio.volume = e.target.value;
+    document.getElementById("view-gallery-btn").onclick = () => document.getElementById("gallery-start").scrollIntoView();
+    document.querySelector(".close-btn").onclick = () => document.getElementById("photo-modal").style.display = "none";
+
+    // 6. Timer (Nov 29, 2025 at 8:39 PM)
     const startDate = new Date("November 29, 2025 20:39:00").getTime();
     setInterval(() => {
-        const diff = new Date().getTime() - startDate;
+        const now = new Date().getTime();
+        const diff = now - startDate;
         const d = Math.floor(diff / 86400000);
         const h = Math.floor((diff % 86400000) / 3600000);
         const m = Math.floor((diff % 3600000) / 60000);
