@@ -38,3 +38,17 @@ button {
 button:hover {
   transform: scale(1.2);
 }
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.container {
+    animation: fadeInUp 1.5s ease-out;
+}
