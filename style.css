@@ -17,13 +17,14 @@ body {
     border-radius: 15px;
     margin-bottom: 40px;
     backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-/* THE GRID */
+/* Photo Grid */
 #photo-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 15px;
     padding: 20px;
 }
 
@@ -36,49 +37,62 @@ body {
     transition: transform 0.3s ease;
 }
 
+.polaroid img { width: 100%; height: 160px; object-fit: cover; }
+.polaroid p { color: #444; font-family: 'cursive', 'Brush Script MT'; margin: 10px 0 0 0; font-size: 0.9rem; }
 .polaroid:hover { transform: scale(1.05) rotate(2deg); }
 
-.polaroid img { 
-    width: 100%; 
-    height: 180px; 
-    object-fit: cover; 
-    border: 1px solid #eee;
-}
-
-.polaroid p { color: #444; font-family: 'cursive'; margin: 10px 0 0 0; }
-
-/* Floating Controls */
+/* Control Panel */
 .fixed-controls {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 100;
-    background: rgba(255, 255, 255, 0.2);
-    padding: 10px;
+    bottom: 15px;
+    right: 15px;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.25);
+    padding: 15px;
     border-radius: 20px;
     backdrop-filter: blur(10px);
+    border: 1px solid white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
-#heart-btn { font-size: 2.5rem; background: none; border: none; cursor: pointer; }
-.secondary-btn { display: block; background: white; color: #ff9a9e; border: none; padding: 8px 12px; border-radius: 10px; margin: 5px 0; font-size: 0.8rem; cursor: pointer; }
+#song-info { font-size: 0.7rem; margin-bottom: 8px; background: rgba(0,0,0,0.2); padding: 4px 10px; border-radius: 10px; }
+#heart-btn { font-size: 2.5rem; background: none; border: none; cursor: pointer; margin-bottom: 5px; }
 
-/* Modal */
-.modal {
-    display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.9); justify-content: center; align-items: center;
-}
-.modal-polaroid { background: white; padding: 15px; width: 90%; max-width: 400px; }
-.modal-polaroid img { width: 100%; }
-.close-btn { position: absolute; top: 10px; right: 25px; color: white; font-size: 40px; cursor: pointer; }
-/* Add this to your existing CSS */
-#song-title {
-    font-size: 0.7rem;
-    background: rgba(0,0,0,0.2);
-    padding: 3px 8px;
+.secondary-btn {
+    display: block;
+    width: 100%;
+    background: white;
+    color: #ff9a9e;
+    border: none;
+    padding: 8px 12px;
     border-radius: 10px;
-    margin-bottom: 5px;
-    max-width: 150px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    margin: 3px 0;
+    font-size: 0.8rem;
+    font-weight: bold;
+    cursor: pointer;
 }
+
+.volume-controls { display: flex; align-items: center; gap: 5px; margin-top: 5px; }
+#volume-slider { accent-color: white; width: 80px; cursor: pointer; }
+
+/* Modal View */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0; top: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-polaroid { background: white; padding: 15px; width: 90%; max-width: 400px; position: relative; }
+.modal-polaroid img { width: 100%; height: auto; }
+.close-btn { position: absolute; top: -50px; right: 0; color: white; font-size: 50px; cursor: pointer; }
+
+/* Fade Animation */
+.fade-in { animation: fadeIn 2s ease-in; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
