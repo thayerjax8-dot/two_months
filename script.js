@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. YOUR EXACT FILE NAMES
     const photoFiles = [
         "1.jpg.JPG", "2.jpg.JPG", "3.jpg.JPG", "4.jpg.JPG", "5.jpg.JPG",
         "6.jpg.JPG", "7.jpg.JPG", "8.jpg.HEIC", "9.jpg.HEIC", "10.jpg.HEIC",
@@ -19,13 +18,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const modal = document.getElementById("photo-modal");
     const modalImg = document.getElementById("modal-img");
 
-    // 2. Scatter Photos
+    // 1. Scatter Photos
     photoFiles.forEach((file, index) => {
         const pol = document.createElement("div");
         pol.className = "polaroid";
         
         const x = Math.random() * (window.innerWidth - 150);
-        const y = Math.random() * 1500 + 200; // Spreads them deep down
+        const y = Math.random() * 1800 + 400; // Photos start lower down now
         const rot = Math.random() * 40 - 20;
 
         pol.style.left = `${x}px`;
@@ -41,6 +40,11 @@ document.addEventListener("DOMContentLoaded", () => {
         };
         scatterField.appendChild(pol);
     });
+
+    // 2. Gallery Button Scroll
+    document.getElementById("view-gallery-btn").onclick = () => {
+        document.getElementById("gallery-start").scrollIntoView();
+    };
 
     // 3. Timer (Nov 29, 2025)
     const startDate = new Date("November 29, 2025 20:39:00").getTime();
@@ -59,7 +63,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("heart-btn").onclick = () => {
         if(music.paused) music.play();
-        document.getElementById("message").textContent = "I Love You! 💕";
     };
 
     document.getElementById("next-song-btn").onclick = () => {
