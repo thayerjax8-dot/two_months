@@ -1,10 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
   const messages = [
-    "I love you more every day 🥹",
-    "Two months already, forever to go ❤️",
-    "You make my life better 💫",
-    "I’m so lucky to have you 💕",
-    "This is just the beginning 😌"
+    "I can't wait to see you running around with your long stick,
+    " I'm Ken Tran, your husband.",
+    "You make me so h.....",
+    "Can you sit on my..",
   ];
 
   const button = document.getElementById("heart-btn");
