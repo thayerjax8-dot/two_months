@@ -20,7 +20,6 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-/* Photo Grid */
 #photo-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -41,7 +40,6 @@ body {
 .polaroid p { color: #444; font-family: 'cursive', 'Brush Script MT'; margin: 10px 0 0 0; font-size: 0.9rem; }
 .polaroid:hover { transform: scale(1.05) rotate(2deg); }
 
-/* Control Panel */
 .fixed-controls {
     position: fixed;
     bottom: 15px;
@@ -78,7 +76,6 @@ body {
 .volume-controls { display: flex; align-items: center; gap: 5px; margin-top: 5px; }
 #volume-slider { accent-color: white; width: 80px; cursor: pointer; }
 
-/* Modal View */
 .modal {
     display: none;
     position: fixed;
@@ -93,6 +90,5 @@ body {
 .modal-polaroid img { width: 100%; height: auto; }
 .close-btn { position: absolute; top: -50px; right: 0; color: white; font-size: 50px; cursor: pointer; }
 
-/* Fade Animation */
 .fade-in { animation: fadeIn 2s ease-in; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
