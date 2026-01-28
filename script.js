@@ -1,9 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. Photo File Names (Updated to match your exact file names)
+    // 1. Photo File Names (Exactly as they appear in your GitHub folder)
     const photoFiles = [
         "1.jpg.JPG", "2.jpg.JPG", "3.jpg.JPG", "4.jpg.JPG", "5.jpg.JPG",
         "6.jpg.JPG", "7.jpg.JPG", "8.jpg.jpg", "9.jpg.jpg", "10.jpg.jpg",
-        "11.jpg.JPG", "12.jpg.HEIC", "13.jpg.JPG", "14.jpg (1).jpg", "15.jpg.JPG",
+        "11.jpg.JPG", "12.jpg.jpg", "13.jpg.JPG", "14.jpg (1).jpg", "15.jpg.JPG",
         "16.jpg (1).jpg", "17.jpg.JPG", "18.jpg.JPG", "19.jpg.JPG", "20.jpg.JPG"
     ];
 
@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
         grid.appendChild(pol);
     });
 
-    // 4. THE NEXT SONG BUTTON
+    // 4. NEXT SONG BUTTON Logic
     const nextBtn = document.getElementById("next-song-btn");
     nextBtn.addEventListener("click", () => {
         currentTrack = (currentTrack + 1) % playlist.length;
@@ -45,13 +45,13 @@ document.addEventListener("DOMContentLoaded", () => {
         trackLabel.textContent = playlist[currentTrack].split('.')[0];
     });
 
-    // 5. General Interaction Logic
+    // 5. Interaction Logic
     document.getElementById("heart-btn").onclick = () => audio.play();
     document.getElementById("volume-slider").oninput = (e) => audio.volume = e.target.value;
     document.getElementById("view-gallery-btn").onclick = () => document.getElementById("gallery-start").scrollIntoView();
     document.querySelector(".close-btn").onclick = () => document.getElementById("photo-modal").style.display = "none";
 
-    // 6. Timer (Nov 29, 2025 at 8:39 PM)
+    // 6. Timer (Set to your anniversary date/time)
     const startDate = new Date("November 29, 2025 20:39:00").getTime();
     setInterval(() => {
         const now = new Date().getTime();
