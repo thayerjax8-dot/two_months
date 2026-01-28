@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
         "Flatland Cavalry - Sleeping Alone (Official Audio).mp3"
     ];
 
-    // Updated notes with grammar fixes
     const notes = {
         miss: "Hi Lily! Whenever you miss me, first you should try to find a distraction. But if that doesn't work, just imagine giving me the biggest hug when you see me, and think of a joke to tell me! I love you.",
         badDay: "Hi Lily! If you're having a bad day for whatever reason, please remember that you're an awesome person. Think of all the people who care about you and would want to hear about your day—whether to comfort you or celebrate it with you. Remember those who care and do so much for you!"
@@ -27,14 +26,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const trackLabel = document.getElementById("current-track");
     const slider = document.getElementById("photo-slider");
 
-    window.revealNote = (type) => {
+    // Fix for the buttons
+    document.getElementById("miss-btn").addEventListener("click", () => revealNote('miss'));
+    document.getElementById("badDay-btn").addEventListener("click", () => revealNote('badDay'));
+    document.getElementById("close-note-btn").addEventListener("click", closeNote);
+
+    function revealNote(type) {
         document.getElementById("note-text").textContent = notes[type];
         document.getElementById("note-display").classList.remove("hidden");
-    };
-    window.closeNote = () => {
-        document.getElementById("note-display").classList.add("hidden");
-    };
+        document.getElementById("note-display").scrollIntoView({ behavior: 'smooth' });
+    }
 
+    function closeNote() {
+        document.getElementById("note-display").classList.add("hidden");
+    }
+
+    // Falling Hearts
     const createHeart = () => {
         const heart = document.createElement("div");
         heart.className = "heart";
@@ -45,8 +52,9 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("hearts-container").appendChild(heart);
         setTimeout(() => heart.remove(), 5000);
     };
-    setInterval(createHeart, 450);
+    setInterval(createHeart, 500);
 
+    // Populate Slider
     photoFiles.forEach(file => {
         const img = document.createElement("img");
         img.src = file;
@@ -55,7 +63,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const updateSlider = () => {
         const imgs = slider.querySelectorAll("img");
-        imgs.forEach(img => img.style.transform = `translateX(-${currentPhoto * 100}%)`);
+        imgs.forEach(img => {
+            img.style.transform = `translateX(-${currentPhoto * 100}%)`;
+        });
     };
 
     document.getElementById("next-btn").onclick = () => {
@@ -68,9 +78,10 @@ document.addEventListener("DOMContentLoaded", () => {
         updateSlider();
     };
 
+    // Record Player Logic
     record.onclick = () => {
         if (audio.paused) {
-            audio.play();
+            audio.play().catch(e => console.log("Audio play blocked, need user interaction first."));
         } else {
             currentTrack = (currentTrack + 1) % playlist.length;
             audio.src = playlist[currentTrack];
@@ -83,18 +94,24 @@ document.addEventListener("DOMContentLoaded", () => {
     audio.onplay = () => record.classList.add("spinning");
     audio.onpause = () => record.classList.remove("spinning");
 
+    // Timers
     const anniversary = new Date("November 29, 2025 20:39:00").getTime();
     const vday = new Date("February 14, 2026 00:00:00").getTime();
     const stagecoach = new Date("April 25, 2026 00:00:00").getTime();
 
     setInterval(() => {
         const now = new Date().getTime();
+        
         const diffUp = now - anniversary;
         document.getElementById("timer").textContent = `${Math.floor(diffUp / 86400000)}d ${Math.floor((diffUp % 86400000) / 3600000)}h ${Math.floor((diffUp % 3600000) / 60000)}m ${Math.floor((diffUp % 60000) / 1000)}s`;
 
         const updateCD = (target, id) => {
             const d = target - now;
-            document.getElementById(id).textContent = d > 0 ? `${Math.floor(d / 86400000)}d ${Math.floor((d % 86400000) / 3600000)}h ${Math.floor((d % 3600000) / 60000)}m ${Math.floor((d % 60000) / 1000)}s` : "Today! ❤️";
+            if (d > 0) {
+                document.getElementById(id).textContent = `${Math.floor(d / 86400000)}d ${Math.floor((d % 86400000) / 3600000)}h ${Math.floor((d % 3600000) / 60000)}m ${Math.floor((d % 60000) / 1000)}s`;
+            } else {
+                document.getElementById(id).textContent = "It's time! ❤️";
+            }
         };
         updateCD(vday, "vday-timer");
         updateCD(stagecoach, "stagecoach-timer");
