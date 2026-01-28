@@ -10,11 +10,11 @@
     <div id="hearts-container"></div>
 
     <audio id="bg-music" loop>
-        <source id="music-source" src="Eagles - Lyin' Eyes (Official Audio).mp3" type="audio/mpeg">
+        <source src="Eagles - Lyin' Eyes (Official Audio).mp3" type="audio/mpeg">
     </audio>
 
     <div class="container">
-        <h1 id="dynamic-header" class="fade-in">Hi Lily! ❤️</h1>
+        <h1 id="dynamic-header">Hi Lily! ❤️</h1>
 
         <div id="timer-container">
             <p>We've been together for:</p>
@@ -72,4 +72,12 @@
         </div>
         <div class="volume-controls">
             <span>🔈</span>
-            <input type
+            <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5">
+            <span>🔊</span>
+        </div>
+        <button id="view-gallery-btn" class="secondary-btn">View Gallery 📸</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
