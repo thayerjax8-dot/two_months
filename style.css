@@ -14,7 +14,7 @@ body {
 .heart { position: absolute; color: rgba(255, 255, 255, 0.6); font-size: 20px; animation: fall linear forwards; }
 @keyframes fall { to { transform: translateY(100vh); } }
 
-.container { position: relative; z-index: 1; padding: 20px; max-width: 1000px; margin: auto; padding-bottom: 200px; }
+.container { position: relative; z-index: 1; padding: 20px; max-width: 1000px; margin: auto; padding-bottom: 250px; }
 
 #timer-container {
     background: rgba(255, 255, 255, 0.2);
@@ -23,6 +23,9 @@ body {
 }
 
 .big-timer { font-size: 1.8rem; font-weight: bold; }
+
+.mini-timers { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 30px; }
+.timer-card { background: rgba(0, 0, 0, 0.1); padding: 10px; border-radius: 10px; min-width: 160px; border: 1px solid rgba(255, 255, 255, 0.2); }
 
 .envelope-grid { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
 .env-btn { background: white; color: #ff9a9e; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
@@ -33,49 +36,28 @@ body {
     max-width: 450px; margin: 20px auto; box-shadow: 5px 10px 20px rgba(0,0,0,0.2);
     position: relative; line-height: 1.6; font-family: 'Comic Sans MS', cursive;
     border-left: 5px solid #ff9a9e;
-    animation: fadeIn 0.5s ease-in;
 }
 .hidden { display: none; }
 .close-note { background: #ff9a9e; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-top: 15px; font-weight: bold; }
 
-/* BIGGER SLIDESHOW */
+/* BIG SLIDER */
 .slider-container { position: relative; display: flex; align-items: center; justify-content: center; margin: 40px auto; max-width: 90%; }
-.photo-slider { 
-    display: flex; 
-    overflow: hidden; 
-    width: 500px;  /* Increased from 300px */
-    height: 650px; /* Increased from 400px */
-    border: 15px solid white; 
-    box-shadow: 0 15px 30px rgba(0,0,0,0.3); 
-    border-radius: 10px;
-    background: #eee;
-}
-.photo-slider img { 
-    width: 500px; 
-    height: 100%; 
-    object-fit: contain; /* Changed to contain so photos don't crop */
-    background: #000;
-    flex-shrink: 0; 
-    transition: transform 0.5s ease-in-out, scale 0.3s ease; 
-}
-.photo-slider img:hover { scale: 1.05; } /* Slight focus effect */
+.photo-slider { display: flex; overflow: hidden; width: 500px; height: 650px; border: 15px solid white; box-shadow: 0 15px 30px rgba(0,0,0,0.3); border-radius: 10px; background: #000; }
+.photo-slider img { width: 500px; height: 100%; object-fit: contain; flex-shrink: 0; transition: transform 0.5s ease-in-out; }
 
-.nav-btn { background: rgba(255,255,255,0.8); border: none; font-size: 2.5rem; cursor: pointer; color: #ff9a9e; border-radius: 50%; z-index: 10; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+.nav-btn { background: rgba(255,255,255,0.8); border: none; font-size: 2.5rem; cursor: pointer; color: #ff9a9e; border-radius: 50%; z-index: 10; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; margin: 0 10px; }
 
-.record-player { margin: 10px 0; cursor: pointer; }
-.record { width: 80px; height: 80px; background: #222; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; background: radial-gradient(circle, #333 10%, #111 11%, #111 20%, #333 21%, #333 30%, #111 31%); animation: spin 3s linear infinite; animation-play-state: paused; }
-.record-label { width: 30px; height: 30px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+/* FIXED CONTROLS */
+.fixed-controls { position: fixed; bottom: 15px; right: 15px; z-index: 1000; background: rgba(255, 255, 255, 0.45); padding: 15px; border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid white; display: flex; flex-direction: column; align-items: center; }
+.audio-btns { display: flex; gap: 5px; width: 100%; }
+.secondary-btn { background: white; color: #ff9a9e; border: none; padding: 8px 12px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; margin: 5px 0; font-size: 0.75rem; }
+
+.record { width: 70px; height: 70px; background: #222; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, #333 10%, #111 11%, #111 20%, #333 21%, #333 30%, #111 31%); animation: spin 3s linear infinite; animation-play-state: paused; margin-bottom: 5px; }
 .spinning { animation-play-state: running !important; }
 @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-.fixed-controls { position: fixed; bottom: 15px; right: 15px; z-index: 1000; background: rgba(255, 255, 255, 0.45); padding: 15px; border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid white; display: flex; flex-direction: column; align-items: center; }
-.secondary-btn { background: white; color: #ff9a9e; border: none; padding: 8px 12px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; margin: 5px 0; }
 .volume-controls { display: flex; align-items: center; gap: 5px; margin-top: 5px; }
 #volume-slider { accent-color: white; width: 80px; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-/* Mobile optimization for big slider */
-@media (max-width: 600px) {
-    .photo-slider { width: 300px; height: 400px; }
-    .photo-slider img { width: 300px; }
-}
+@media (max-width: 600px) { .photo-slider { width: 300px; height: 400px; } .photo-slider img { width: 300px; } }
