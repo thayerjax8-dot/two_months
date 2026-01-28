@@ -9,7 +9,7 @@
 <body>
     <div id="hearts-container"></div>
 
-    <audio id="bg-music">
+    <audio id="bg-music" loop>
         <source id="music-source" src="Eagles - Lyin' Eyes (Official Audio).mp3" type="audio/mpeg">
     </audio>
 
@@ -38,12 +38,12 @@
         <div class="open-when-section">
             <h2>Open When... ✉️</h2>
             <div class="envelope-grid">
-                <button class="env-btn" onclick="revealNote('miss')">You miss me</button>
-                <button class="env-btn" onclick="revealNote('badDay')">You're having a bad day</button>
+                <button class="env-btn" id="miss-btn">You miss me</button>
+                <button class="env-btn" id="badDay-btn">You're having a bad day</button>
             </div>
             <div id="note-display" class="note-paper hidden">
                 <p id="note-text"></p>
-                <button onclick="closeNote()" class="close-note">Close Note</button>
+                <button id="close-note-btn" class="close-note">Close Note</button>
             </div>
         </div>
 
