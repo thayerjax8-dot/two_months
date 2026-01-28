@@ -20,17 +20,26 @@ document.addEventListener("DOMContentLoaded", () => {
         badDay: "Hi Lily! If you're having a bad day for whatever reason, please remember that you're an awesome person. Think of all the people who care about you and would want to hear about your day—whether to comfort you or celebrate it with you. Remember those who care and do so much for you!"
     };
 
-    let currentTrack = 0;
-    let currentPhoto = 0;
+    // 2. DYNAMIC HEADER LOGIC
+    const header = document.getElementById("dynamic-header");
+    const hour = new Date().getHours();
+    
+    if (hour >= 5 && hour < 12) {
+        header.textContent = "Good Morning, Lily ❤️";
+    } else if (hour >= 12 && hour < 18) {
+        header.textContent = "Good Afternoon, Lily ❤️";
+    } else {
+        header.textContent = "Good Evening, Lily ❤️";
+    }
 
-    // 2. ELEMENT SELECTORS
+    // 3. ELEMENT SELECTORS
     const audio = document.getElementById("bg-music");
     const record = document.getElementById("record-disc");
     const trackLabel = document.getElementById("current-track");
     const slider = document.getElementById("photo-slider");
     const playPauseBtn = document.getElementById("play-pause-toggle");
 
-    // 3. AUDIO LOGIC
+    // 4. AUDIO CONTROLS (Fixed Logic)
     playPauseBtn.onclick = () => {
         if (audio.paused) {
             audio.play();
@@ -53,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
     audio.onplay = () => record.classList.add("spinning");
     audio.onpause = () => record.classList.remove("spinning");
 
-    // 4. OPEN WHEN LOGIC
+    // 5. OPEN WHEN LOGIC (Fixed Listeners)
     document.getElementById("miss-btn").onclick = () => {
         document.getElementById("note-text").textContent = notes.miss;
         document.getElementById("note-display").classList.remove("hidden");
@@ -68,13 +77,14 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("note-display").classList.add("hidden");
     };
 
-    // 5. SLIDER POPULATION & NAV
+    // 6. SLIDER LOGIC
     photoFiles.forEach(file => {
         const img = document.createElement("img");
         img.src = file;
         slider.appendChild(img);
     });
 
+    let currentPhoto = 0;
     document.getElementById("next-btn").onclick = () => {
         currentPhoto = (currentPhoto + 1) % photoFiles.length;
         updateSlider();
@@ -90,21 +100,20 @@ document.addEventListener("DOMContentLoaded", () => {
         imgs.forEach(img => img.style.transform = `translateX(-${currentPhoto * 100}%)`);
     }
 
-    // 6. ALL TIMERS
+    // 7. TIMERS (Fixed Dates)
     const annivDate = new Date("November 29, 2025 20:39:00").getTime();
     const vdayDate = new Date("February 14, 2026 00:00:00").getTime();
     const aspenDate = new Date("February 17, 2026 00:00:00").getTime();
     const stageDate = new Date("April 25, 2026 00:00:00").getTime();
 
-    function updateAllTimers() {
+    function updateTimers() {
         const now = new Date().getTime();
 
-        // Together Count Up
+        // Together Counter
         const up = now - annivDate;
         document.getElementById("timer").textContent = 
             `${Math.floor(up/86400000)}d ${Math.floor((up%86400000)/3600000)}h ${Math.floor((up%3600000)/60000)}m ${Math.floor((up%60000)/1000)}s`;
 
-        // Function for Count Downs
         const setCD = (target, elId) => {
             const diff = target - now;
             if (diff > 0) {
@@ -119,10 +128,9 @@ document.addEventListener("DOMContentLoaded", () => {
         setCD(aspenDate, "aspen-timer");
         setCD(stageDate, "stagecoach-timer");
     }
+    setInterval(updateTimers, 1000);
 
-    setInterval(updateAllTimers, 1000);
-
-    // 7. HEARTS
+    // 8. HEARTS
     setInterval(() => {
         const heart = document.createElement("div");
         heart.className = "heart";
@@ -133,7 +141,6 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => heart.remove(), 5000);
     }, 500);
 
-    // 8. OTHER CONTROLS
     document.getElementById("volume-slider").oninput = (e) => audio.volume = e.target.value;
     document.getElementById("view-gallery-btn").onclick = () => document.getElementById("gallery-start").scrollIntoView({behavior: 'smooth'});
 });
