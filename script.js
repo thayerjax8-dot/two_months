@@ -26,47 +26,39 @@ document.addEventListener("DOMContentLoaded", () => {
     const trackLabel = document.getElementById("current-track");
     const slider = document.getElementById("photo-slider");
 
-    // Fix for the buttons
-    document.getElementById("miss-btn").addEventListener("click", () => revealNote('miss'));
-    document.getElementById("badDay-btn").addEventListener("click", () => revealNote('badDay'));
-    document.getElementById("close-note-btn").addEventListener("click", closeNote);
+    // BUTTON EVENT LISTENERS
+    document.getElementById("miss-btn").onclick = () => revealNote('miss');
+    document.getElementById("badDay-btn").onclick = () => revealNote('badDay');
+    document.getElementById("close-note-btn").onclick = () => document.getElementById("note-display").classList.add("hidden");
 
     function revealNote(type) {
         document.getElementById("note-text").textContent = notes[type];
         document.getElementById("note-display").classList.remove("hidden");
-        document.getElementById("note-display").scrollIntoView({ behavior: 'smooth' });
     }
 
-    function closeNote() {
-        document.getElementById("note-display").classList.add("hidden");
-    }
-
-    // Falling Hearts
-    const createHeart = () => {
-        const heart = document.createElement("div");
-        heart.className = "heart";
-        heart.innerHTML = "❤️";
-        heart.style.left = Math.random() * 100 + "vw";
-        heart.style.animationDuration = Math.random() * 3 + 2 + "s";
-        heart.style.opacity = Math.random();
-        document.getElementById("hearts-container").appendChild(heart);
-        setTimeout(() => heart.remove(), 5000);
+    // MUSIC CONTROLS
+    document.getElementById("play-pause-btn").onclick = () => {
+        if (audio.paused) audio.play();
+        else audio.pause();
     };
-    setInterval(createHeart, 500);
 
-    // Populate Slider
+    document.getElementById("next-song-btn").onclick = () => {
+        currentTrack = (currentTrack + 1) % playlist.length;
+        audio.src = playlist[currentTrack];
+        audio.load();
+        audio.play();
+        trackLabel.textContent = playlist[currentTrack].split('.')[0];
+    };
+
+    audio.onplay = () => record.classList.add("spinning");
+    audio.onpause = () => record.classList.remove("spinning");
+
+    // SLIDER
     photoFiles.forEach(file => {
         const img = document.createElement("img");
         img.src = file;
         slider.appendChild(img);
     });
-
-    const updateSlider = () => {
-        const imgs = slider.querySelectorAll("img");
-        imgs.forEach(img => {
-            img.style.transform = `translateX(-${currentPhoto * 100}%)`;
-        });
-    };
 
     document.getElementById("next-btn").onclick = () => {
         currentPhoto = (currentPhoto + 1) % photoFiles.length;
@@ -78,44 +70,44 @@ document.addEventListener("DOMContentLoaded", () => {
         updateSlider();
     };
 
-    // Record Player Logic
-    record.onclick = () => {
-        if (audio.paused) {
-            audio.play().catch(e => console.log("Audio play blocked, need user interaction first."));
-        } else {
-            currentTrack = (currentTrack + 1) % playlist.length;
-            audio.src = playlist[currentTrack];
-            audio.load();
-            audio.play();
-            trackLabel.textContent = playlist[currentTrack].split('.')[0];
-        }
-    };
+    function updateSlider() {
+        const imgs = slider.querySelectorAll("img");
+        imgs.forEach(img => img.style.transform = `translateX(-${currentPhoto * 100}%)`);
+    }
 
-    audio.onplay = () => record.classList.add("spinning");
-    audio.onpause = () => record.classList.remove("spinning");
-
-    // Timers
+    // TIMERS
     const anniversary = new Date("November 29, 2025 20:39:00").getTime();
     const vday = new Date("February 14, 2026 00:00:00").getTime();
+    const aspen = new Date("February 17, 2026 00:00:00").getTime();
     const stagecoach = new Date("April 25, 2026 00:00:00").getTime();
 
     setInterval(() => {
         const now = new Date().getTime();
         
-        const diffUp = now - anniversary;
-        document.getElementById("timer").textContent = `${Math.floor(diffUp / 86400000)}d ${Math.floor((diffUp % 86400000) / 3600000)}h ${Math.floor((diffUp % 3600000) / 60000)}m ${Math.floor((diffUp % 60000) / 1000)}s`;
+        // Count Up
+        const up = now - anniversary;
+        document.getElementById("timer").textContent = `${Math.floor(up/86400000)}d ${Math.floor((up%86400000)/3600000)}h ${Math.floor((up%3600000)/60000)}m ${Math.floor((up%60000)/1000)}s`;
 
+        // Count Downs
         const updateCD = (target, id) => {
             const d = target - now;
-            if (d > 0) {
-                document.getElementById(id).textContent = `${Math.floor(d / 86400000)}d ${Math.floor((d % 86400000) / 3600000)}h ${Math.floor((d % 3600000) / 60000)}m ${Math.floor((d % 60000) / 1000)}s`;
-            } else {
-                document.getElementById(id).textContent = "It's time! ❤️";
-            }
+            document.getElementById(id).textContent = d > 0 ? `${Math.floor(d/86400000)}d ${Math.floor((d%86400000)/3600000)}h ${Math.floor((d%3600000)/60000)}m ${Math.floor((d%60000)/1000)}s` : "Enjoy! ❤️";
         };
         updateCD(vday, "vday-timer");
+        updateCD(aspen, "aspen-timer");
         updateCD(stagecoach, "stagecoach-timer");
     }, 1000);
+
+    // Falling Hearts
+    setInterval(() => {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerHTML = "❤️";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = Math.random() * 3 + 2 + "s";
+        document.getElementById("hearts-container").appendChild(heart);
+        setTimeout(() => heart.remove(), 5000);
+    }, 500);
 
     document.getElementById("volume-slider").oninput = (e) => audio.volume = e.target.value;
     document.getElementById("view-gallery-btn").onclick = () => document.getElementById("gallery-start").scrollIntoView();
